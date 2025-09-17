@@ -45,6 +45,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -71,109 +74,208 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               ),
             ),
 
-            // 🔹 Scrollable content with SliverAppBar
-            CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  expandedHeight: 250,
-                  pinned: true,
-                  floating: false,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: ClipPath(
-                      clipper: CurvedImageClipper(),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          // Project image
-                          Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(widget.project.imageUrl),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          // Overlay color (customize color and opacity as needed)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(
-                                0.4,
-                              ), // Change color/opacity here
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  title: Text(
-                    widget.project.title,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  centerTitle: true,
-                ),
-
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.project.title,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.project.description,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
-                            color: Colors.white70,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  ),
-                ),
-
-                if (widget.project.gallary.length > 1)
-                  SliverPadding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      bottom: 50,
-                    ),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final imageUrl = widget.project.gallary[index];
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: GlassBehindCard(imageUrl: imageUrl),
-                        );
-                      }, childCount: widget.project.gallary.length),
-                    ),
-                  ),
-              ],
-            ),
+            if (isMobile)
+              _buildNarrowLayout(context)
+            else
+              _buildWideLayout(context),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildNarrowLayout(BuildContext context) {
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        _buildSliverAppBar(context, isMobile: true),
+        _buildProjectInfo(context, isMobile: true),
+        _buildGallery(context, isMobile: true),
+      ],
+    );
+  }
+
+  Widget _buildWideLayout(BuildContext context) {
+    return Column(
+      children: [
+        _buildAppBarForWide(context),
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left Column: Details
+              Expanded(
+                flex: 2,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 32,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.project.title,
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        widget.project.description,
+                        style: TextStyle(
+                          fontSize: 18,
+                          height: 1.6,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Right Column: Gallery
+              Expanded(
+                flex: 3,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [_buildGallery(context, isMobile: false)],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  AppBar _buildAppBarForWide(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white.withOpacity(0.05),
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: Text(
+        widget.project.title,
+        style: const TextStyle(color: Colors.white),
+      ),
+      centerTitle: true,
+    );
+  }
+
+  SliverAppBar _buildSliverAppBar(
+    BuildContext context, {
+    required bool isMobile,
+  }) {
+    return SliverAppBar(
+      backgroundColor: Colors.transparent,
+      expandedHeight: isMobile ? 250 : 350,
+      pinned: true,
+      floating: false,
+      flexibleSpace: FlexibleSpaceBar(
+        background: ClipPath(
+          clipper: CurvedImageClipper(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(widget.project.imageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
+              ),
+            ],
+          ),
+        ),
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: Text(
+        widget.project.title,
+        style: const TextStyle(color: Colors.white),
+      ),
+      centerTitle: true,
+    );
+  }
+
+  Widget _buildProjectInfo(BuildContext context, {required bool isMobile}) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 16 : 40,
+          vertical: isMobile ? 16 : 32,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.project.title,
+              style: TextStyle(
+                fontSize: isMobile ? 24 : 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.project.description,
+              style: TextStyle(
+                fontSize: isMobile ? 16 : 18,
+                height: 1.5,
+                color: Colors.white70,
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGallery(BuildContext context, {required bool isMobile}) {
+    if (widget.project.gallary.length <= 1) return const SliverToBoxAdapter();
+
+    if (isMobile) {
+      return SliverPadding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 50),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: GlassBehindCard(imageUrl: widget.project.gallary[index]),
+            ),
+            childCount: widget.project.gallary.length,
+          ),
+        ),
+      );
+    } else {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+        sliver: SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 24,
+            mainAxisSpacing: 24,
+            childAspectRatio: 1.2,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) =>
+                GlassBehindCard(imageUrl: widget.project.gallary[index]),
+            childCount: widget.project.gallary.length,
+          ),
+        ),
+      );
+    }
   }
 }
 

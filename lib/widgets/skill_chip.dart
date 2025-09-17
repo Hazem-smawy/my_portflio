@@ -23,7 +23,7 @@ class _SkillChipState extends State<SkillChip>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-
+    print(widget.skill);
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: 1.1,
@@ -87,7 +87,8 @@ class _SkillChipState extends State<SkillChip>
                   const SizedBox(width: 6),
                   Text(
                     widget.skill,
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
+                      fontFamily: 'Jannat',
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.onSurface,

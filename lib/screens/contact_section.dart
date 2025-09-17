@@ -3,108 +3,84 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_portflio/controller/theme_controller.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController = Get.find();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
 
-    return Column(
-      children: [
-        // Glass Container
-        Container(
-          padding: const EdgeInsets.all(30),
-          // margin: const EdgeInsets.symmetric(horizontal: 20),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(0),
-          //   gradient: LinearGradient(
-          //     colors: [
-          //       themeController.currentColor.value.withAlpha(100),
-          //       themeController.isDark.value
-          //           ? Colors.black.withAlpha(100)
-          //           : Colors.white.withAlpha(100),
-          //     ],
-          //     begin: Alignment.topLeft,
-          //     end: Alignment.bottomRight,
-          //   ),
-          // ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 40,
+        vertical: isMobile ? 40 : 80,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'تواصل معي',
+            style: TextStyle(
+              fontSize: isMobile ? 22 : 28,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Jazeera',
+            ),
+          ),
+          SizedBox(height: isMobile ? 24 : 36),
+          // Contact Buttons Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Text(
-              //   "دعنا نعمل معًا!",
-              //   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              //     fontWeight: FontWeight.w600,
-              //     color: themeController.isDark.value
-              //         ? Colors.white
-              //         : Colors.black87,
-              //   ),
-              // ),
-              const SizedBox(height: 20),
-
-              const SizedBox(height: 50),
-              Text(
-                'تواصل معي',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              ContactButton(
+                assetPath: 'assets/icons/twitter.svg',
+                label: 'Twitter',
+                onTap: () => _launchUrl('https://twitter.com/your_handle'),
               ),
-              const SizedBox(height: 36),
-              // Contact Buttons Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ContactButton(
-                    assetPath: 'assets/icons/twitter.svg',
-                    label: 'Email',
-                    onTap: () => _launchUrl('mailto:your.email@example.com'),
-                  ),
-                  ContactButton(
-                    assetPath: 'assets/icons/Call.svg',
-                    label: 'Email',
-                    onTap: () => _launchUrl('mailto:your.email@example.com'),
-                  ),
-                  ContactButton(
-                    assetPath: 'assets/icons/Facebook.svg',
-                    label: 'GitHub',
-                    onTap: () => _launchUrl('https://github.com'),
-                  ),
-                  ContactButton(
-                    assetPath: 'assets/icons/Linkedin.svg',
-                    label: 'LinkedIn',
-                    onTap: () => _launchUrl('https://linkedin.com'),
-                  ),
-                ],
+              SizedBox(width: isMobile ? 16 : 24),
+              ContactButton(
+                assetPath: 'assets/icons/Call.svg',
+                label: 'Email',
+                onTap: () => _launchUrl('mailto:hazemsmawy@gmail.com'),
               ),
-              SizedBox(height: 20),
-              Text(
-                'hazemsmawy@gmail.com',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(fontFamily: 'Roboto'),
+              SizedBox(width: isMobile ? 16 : 24),
+              ContactButton(
+                assetPath: 'assets/icons/Facebook.svg',
+                label: 'GitHub',
+                onTap: () => _launchUrl('https://github.com/your_username'),
               ),
-              SizedBox(height: 12),
-              Text(
-                '+967775426836',
-                textDirection: TextDirection.ltr,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(fontFamily: 'Roboto'),
+              SizedBox(width: isMobile ? 16 : 24),
+              ContactButton(
+                assetPath: 'assets/icons/Linkedin.svg',
+                label: 'LinkedIn',
+                onTap: () => _launchUrl('https://linkedin.com/in/your_profile'),
               ),
-              const SizedBox(height: 20),
-
-              const SizedBox(height: 50),
             ],
           ),
-        ),
-      ],
+          SizedBox(height: isMobile ? 24 : 36),
+          SelectableText(
+            'hazemsmawy@gmail.com',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Roboto'),
+          ),
+          const SizedBox(height: 12),
+          SelectableText(
+            '+967 775 426 836',
+            textDirection: TextDirection.ltr,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Roboto'),
+          ),
+        ],
+      ),
     );
   }
 
   void _launchUrl(String url) {
-    // TODO: implement launch logic with url_launcher
+    launchUrl(Uri.parse(url));
   }
 }
 
@@ -131,13 +107,21 @@ class ContactButton extends StatelessWidget {
             assetPath,
             width: 32,
             height: 32,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white
-                : Colors.black87,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).colorScheme.primary,
+              BlendMode.srcIn,
+            ),
           ),
           const SizedBox(height: 5),
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
