@@ -56,14 +56,12 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             // 🔹 Dynamic blurred background
             if (widget.project.gallary.isNotEmpty)
               Positioned.fill(
-                child: CachedNetworkImage(
-                  imageUrl: widget.project.gallary[_currentBackgroundIndex + 1],
+                child: Image.asset(
+                  widget.project.gallary[_currentBackgroundIndex + 1],
                   fit: BoxFit.cover,
+
                   // Show a colored placeholder while loading
-                  placeholder: (context, url) => Container(
-                    color: Colors.grey.shade900, // or any color you prefer
-                  ),
-                  errorWidget: (context, url, error) =>
+                  errorBuilder: (context, url, error) =>
                       Container(color: Colors.grey.shade800),
                 ),
               ),
@@ -184,7 +182,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(widget.project.imageUrl),
+                    image: AssetImage(widget.project.imageUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -309,7 +307,7 @@ class GlassBehindCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
-              image: CachedNetworkImageProvider(imageUrl),
+              image: AssetImage(imageUrl),
               fit: BoxFit.cover,
             ),
           ),

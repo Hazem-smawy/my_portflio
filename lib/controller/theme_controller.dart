@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class ThemeController extends GetxController {
   /// Observables
-  var isDark = false.obs;
+  var isDark = true.obs;
   var currentColor = Colors.blue.obs;
 
   /// Toggle between dark and light mode

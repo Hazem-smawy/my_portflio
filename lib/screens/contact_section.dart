@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:my_portflio/controller/theme_controller.dart';
 import 'package:svg_flutter/svg.dart';
@@ -35,44 +36,69 @@ class ContactSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ContactButton(
-                assetPath: 'assets/icons/twitter.svg',
+                assetPath: '/icons/twitter.svg',
                 label: 'Twitter',
                 onTap: () => _launchUrl('https://twitter.com/your_handle'),
               ),
-              SizedBox(width: isMobile ? 16 : 24),
+              SizedBox(width: isMobile ? 16 : 28),
+
               ContactButton(
-                assetPath: 'assets/icons/Call.svg',
+                assetPath: '/icons/Instagram.svg',
+                label: 'Twitter',
+                onTap: () => _launchUrl('https://twitter.com/your_handle'),
+              ),
+
+              SizedBox(width: isMobile ? 16 : 28),
+              ContactButton(
+                assetPath: '/icons/Message.svg',
                 label: 'Email',
                 onTap: () => _launchUrl('mailto:hazemsmawy@gmail.com'),
               ),
-              SizedBox(width: isMobile ? 16 : 24),
+              SizedBox(width: isMobile ? 16 : 28),
               ContactButton(
-                assetPath: 'assets/icons/Facebook.svg',
+                assetPath: '/icons/Facebook.svg',
                 label: 'GitHub',
                 onTap: () => _launchUrl('https://github.com/your_username'),
               ),
-              SizedBox(width: isMobile ? 16 : 24),
+              SizedBox(width: isMobile ? 16 : 28),
               ContactButton(
-                assetPath: 'assets/icons/Linkedin.svg',
+                assetPath: '/icons/Linkedin.svg',
                 label: 'LinkedIn',
                 onTap: () => _launchUrl('https://linkedin.com/in/your_profile'),
               ),
             ],
           ),
           SizedBox(height: isMobile ? 24 : 36),
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 25 : 32,
+                vertical: isMobile ? 15 : 20,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            onPressed: () {},
+            label: Text("واتساب"),
+            icon: Icon(FontAwesomeIcons.whatsapp),
+          ),
+          SizedBox(height: isMobile ? 12 : 16),
+
           SelectableText(
             'hazemsmawy@gmail.com',
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Roboto'),
+            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Jannat'),
           ),
           const SizedBox(height: 12),
+
           SelectableText(
             '+967 775 426 836',
             textDirection: TextDirection.ltr,
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Roboto'),
+            ).textTheme.bodyLarge?.copyWith(fontFamily: 'Jannat'),
           ),
         ],
       ),

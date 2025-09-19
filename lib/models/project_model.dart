@@ -1,4 +1,5 @@
 class ProjectModel {
+  final int id;
   final String title;
   final String description;
   final List<String> technologies;
@@ -8,6 +9,7 @@ class ProjectModel {
   final List<String> gallary;
 
   ProjectModel({
+    required this.id,
     required this.gallary,
     required this.title,
     required this.description,

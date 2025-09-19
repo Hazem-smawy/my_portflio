@@ -105,6 +105,14 @@ class _PortfolioHomeState extends State<PortfolioHome>
                           // SizedBox(
                           //   height: MediaQuery.of(context).size.height * 0.1,
                           // ),
+                          SizedBox(
+                            height: 200,
+                            // If using a PNG fallback, you would use this instead:
+                            // child: Image.asset('assets/images/Shot.png'),
+                            child: SvgPicture.asset(
+                              'assets/images/Shot.svg',
+                            ), // Keep using SVG if you clean the file
+                          ),
                           AboutSection(),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
@@ -133,7 +141,7 @@ class _PortfolioHomeState extends State<PortfolioHome>
               top: MediaQuery.of(context).size.height / 8,
               right: 20,
               child: Column(
-                spacing: 12,
+                spacing: 16,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(

@@ -33,10 +33,7 @@ class ProjectCard extends StatelessWidget {
                 width: double.infinity, // adjust to your design
                 child: ClipPath(
                   clipper: CustomCardClipper(),
-                  child: CachedNetworkImage(
-                    imageUrl: project.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(project.imageUrl, fit: BoxFit.cover),
                 ),
               ),
             ),

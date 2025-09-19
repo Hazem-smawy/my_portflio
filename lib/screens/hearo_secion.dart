@@ -18,7 +18,7 @@ class HeroSection extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    final imageUrl = 'https://picsum.photos/seed/ui-design-1/1200/900';
+    final imageUrl = '/my_photo/my_photo.jpg';
 
     return Container(
       constraints: BoxConstraints(
@@ -59,20 +59,20 @@ class HeroSection extends StatelessWidget {
                   width: 120,
                   decoration: const BoxDecoration(shape: BoxShape.circle),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.network(
+                  child: Image.asset(
                     imageUrl,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
+                    // : (context, child, loadingProgress) {
+                    //   if (loadingProgress == null) return child;
+                    //   return Center(
+                    //     child: CircularProgressIndicator(
+                    //       value: loadingProgress.expectedTotalBytes != null
+                    //           ? loadingProgress.cumulativeBytesLoaded /
+                    //                 loadingProgress.expectedTotalBytes!
+                    //           : null,
+                    //     ),
+                    //   );
+                    // },
                     errorBuilder: (context, error, stackTrace) {
                       return const Center(
                         child: Icon(
@@ -102,6 +102,7 @@ class HeroSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: isMobile ? 18 : 22,
                   fontFamily: 'Jannat',
+                  height: 1.7,
                   color: Theme.of(
                     context,
                   ).colorScheme.onSurface.withOpacity(0.7),
@@ -121,7 +122,7 @@ class HeroSection extends StatelessWidget {
                       builder: (context) {
                         final color = Theme.of(context).colorScheme.primary;
                         return SvgPicture.asset(
-                          'assets/icons/Product.svg',
+                          '/icons/Product.svg',
                           colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
                           width: 20,
                           height: 20,
@@ -145,7 +146,7 @@ class HeroSection extends StatelessWidget {
                       scrollToSection(3);
                     },
                     icon: SvgPicture.asset(
-                      'assets/icons/Call.svg',
+                      '/icons/Call.svg',
                       colorFilter: ColorFilter.mode(
                         Theme.of(context).colorScheme.primary,
                         BlendMode.srcIn,

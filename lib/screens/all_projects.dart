@@ -26,7 +26,7 @@ class AllProjects extends StatelessWidget {
               fontFamily: 'Jazeera',
             ),
           ),
-          SizedBox(height: isMobile ? 0 : 30),
+          SizedBox(height: isMobile ? 20 : 30),
           if (isMobile)
             ListView.builder(
               shrinkWrap: true,
@@ -48,7 +48,7 @@ class AllProjects extends StatelessWidget {
                 maxCrossAxisExtent: 450,
                 crossAxisSpacing: 24,
                 mainAxisSpacing: 24,
-                childAspectRatio: 1.2,
+                childAspectRatio: 1.4,
               ),
               itemBuilder: (context, index) {
                 return ProjectCard(project: projects[index]);
